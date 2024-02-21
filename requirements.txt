@@ -1,2 +1,4 @@
 keyring
 requests
+boto3
+botocore

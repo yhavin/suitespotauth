@@ -13,35 +13,53 @@ Suitespot data API requests require Bearer Authorization including an access tok
 $ pip install suitespotauth
 ```
 
-## Usage
-1. Set your SuiteSpot credentials (username and password)
+## Configuration
+This package relies on your SuiteSpot username and password, since SuiteSpot's authentication API uses them in creating Basic Authorization for some requests. The username and password can be securely stored either on your computer or in a cloud environment.
+
+### Local environment
+If you are running the package locally, your SuiteSpot credentials are securely stored on your computer using [`keyring`](https://github.com/jaraco/keyring). Run the following command to set your SuiteSpot credentials:
 ```shell
 $ suitespotauth-configure
 ```
 
-2. In your Python program, import the authenticator class
+### Cloud environment
+#### AWS
+If you are running the package in an AWS environment, `suitespotauth` can retrieve your SuiteSpot credentials from AWS Parameter Store (SSM). Please see the [Cloud configuration](#cloud-configuration) section below before continuing.
+
+## Usage
+1. In your Python program, import the authenticator class:
 ```python
 from suitespotauth import SuiteSpotAuth
 ```
 
-3. Create a class instance
+2. Create a class instance:
 ```python
 auth = SuiteSpotAuth()
 
-# Optionally, provide a name variable, which is stored in the SuiteSpot API token object
-auth = SuiteSpotAuth("My Company")
+# Optionally, provide a name which gets stored in the SuiteSpot API token object
+auth = SuiteSpotAuth(api_token_name="Custom API token name")
+
+# If using AWS SSM to store SuiteSpot credentials, provide the SSM paths to your username and password parameters
+auth = SuiteSpotAuth(
+    api_token_name="Custom API token name",  # Optional
+    ssm_username_path="/path/to/suitespot/username/parameter/in/ssm",
+    ssm_password_path="/path/to/suitespot/password/parameter/in/ssm"
+)
 ```
 
-4. Use the `access_token` attribute in your data API request header
+3. Use the `access_token` attribute in your data API request header:
 ```python
 "Authorization": f"Bearer {auth.access_token}"
 ```
 
 Official SuiteSpot data API docs should be retrieved directly from your SuiteSpot representative.
 
-## Configuration
-You must have a SuiteSpot username and password to use this package. When you run `suitespotauth-configure` from the command line, your credentials will be securely stored on your computer using [`keyring`](https://github.com/jaraco/keyring).
+## Cloud configuration
+### AWS Parameter Store (SSM)
+To retrieve SuiteSpot credentials from SSM, you must have an AWS account, as well as IAM permissions for your runtime (e.g., Lambda) to access the parameters. Instructions for IAM permissions are beyond the scope of this readme.
+
+You must set two SSM parameters, username and password, and they can be named anything you want. Choose `SecureString` type when creating the parameters. Then, you must provide the paths to these parameters when instantiating the `SuiteSpotAuth` object. See the [Usage](#usage) section above.
 
 ## Disclaimer
-- This package is unofficial and is not affiliated with SuiteSpot. The official SuiteSpot authentication API docs can be found at: https://auth.suitespot.io/api#/
+- This is an unofficial package and is not affiliated with SuiteSpot. The official SuiteSpot authentication API docs can be found at: https://auth.suitespot.io/api
 - The SuiteSpot authentication API may change at any time, which can cause breaking changes to this package. Please open an issue on GitHub if you notice such problems
