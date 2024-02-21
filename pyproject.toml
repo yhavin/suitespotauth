@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=60.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "suitespotauth"
+version = "0.1.0"
+description = "Easy SuiteSpot authentication."
+authors = [{ name = "Yakir Havin", email = "y.havin@gmail.com" }]
+license = { file = "LICENSE" }
+readme = "README.md"
+keywords = ["authentication", "suitespot", "property", "management", "capex", "construction"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: MIT License"
+]
+dependencies = [
+    "keyring",
+    "requests"
+]
+requires-python = ">=3.8"
+
+[project.scripts]
+suitespotauth-configure = "suitespotauth.configure:main"
