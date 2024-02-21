@@ -1,4 +1,7 @@
-# SuiteSpot Auth
+# SuiteSpot Authentication
+
+[![PyPI](https://img.shields.io/pypi/v/suitespotauth?color=blue)](https://pypi.org/project/suitespotauth/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/blog/license/mit)
 
 ## Introduction
 This package is a light wrapper for the SuiteSpot authentication API to provide easy generation of an access token to be used in SuiteSpot data API calls.
@@ -41,4 +44,4 @@ You must have a SuiteSpot username and password to use this package. When you ru
 
 ## Disclaimer
 - This package is unofficial and is not affiliated with SuiteSpot. The official SuiteSpot authentication API docs can be found at: https://auth.suitespot.io/api#/
-- The SuiteSpot authentication API may change at any time, which can cause breaking changes to this package. Please contact 
+- The SuiteSpot authentication API may change at any time, which can cause breaking changes to this package. Please open an issue on GitHub if you notice such problems
