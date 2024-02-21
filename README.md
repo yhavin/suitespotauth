@@ -1,0 +1,1 @@
+# SuiteSpot Auth
