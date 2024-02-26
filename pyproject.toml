@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "suitespotauth"
-version = "0.2.0"
+version = "0.3.0"
 description = "Easy SuiteSpot authentication."
 authors = [{ name = "Yakir Havin", email = "y.havin@gmail.com" }]
 readme = "README.md"

@@ -1,67 +1,34 @@
 """
-Class for retrieving access token to make API calls to SuiteSpot.
+Class for retrieving access token to make API calls to SuiteSpot analytics.
 """
 
 
 import base64
 
 import requests
-import keyring
-import boto3
-from botocore.exceptions import ClientError
 
-from suitespotauth.configure import SERVICE
-
-
-class SuiteSpotAuthError(Exception):
-    """Custom exception class for SuiteSpotAuth errors."""
-    pass
+from .exceptions import SuiteSpotAuthError
+from .configure import SERVICE
+from .credentials import CredentialStorage
 
 
 class SuiteSpotAuth:
     BASE_URL = "https://auth.suitespot.io/api/api-tokens"
 
-    def __init__(self, *, api_token_name="SuiteSpot User", ssm_username_path=None, ssm_password_path=None):
+    def __init__(self, *, credential_storage: CredentialStorage, api_token_name="SuiteSpot User"):
+        if not isinstance(credential_storage, CredentialStorage):
+            raise TypeError("`credential_storage` must be an sub-instance of CredentialStorage.")
+        
+        self._credential_storage = credential_storage
         self._api_token_name = api_token_name
-        self._ssm_username_path = ssm_username_path
-        self._ssm_password_path = ssm_password_path
-        self._credentials = self._ensure_credentials()
         self._basic_auth_headers = self._generate_basic_auth_headers()
         self._api_token = None
         self._access_token = None
         self._authenticate()
 
-    def _fetch_credentials_from_ssm(self, path):
-        """Retrieve credentials from AWS Parameter Store (SSM)."""
-        ssm = boto3.client("ssm")
-        try:
-            parameter = ssm.get_parameter(Name=path, WithDecryption=True)["Parameter"]["Value"]
-            return parameter
-        except ClientError as e:
-            raise SuiteSpotAuthError(f"An error occurred trying to fetch parameters in SSM from path '{path}'.\n{e}")
-
-    def _ensure_credentials(self):
-        """Check if SuiteSpot credentials have been entered or fetch from AWS Parameter Store."""
-        credentials = {}
-        
-        if bool(self._ssm_username_path) != bool(self._ssm_password_path):
-            raise SuiteSpotAuthError("SSM paths for both username and password must be provided.")
-        
-        if self._ssm_username_path and self._ssm_password_path:
-            credentials["username"] = self._fetch_credentials_from_ssm(self._ssm_username_path)
-            credentials["password"] = self._fetch_credentials_from_ssm(self._ssm_password_path)
-        else:
-            for credential in ["username", "password"]:
-                stored_value = keyring.get_password(SERVICE, credential)
-                if not stored_value:
-                    raise SuiteSpotAuthError("SuiteSpot credentials not configured. Run 'suitespotauth-configure'.")
-                credentials[credential] = stored_value
-        
-        return credentials
-
     def _generate_basic_auth_headers(self): 
         """Generate Basic Authorization header for API token requests."""
-        basic_auth_string = base64.b64encode(f"{self._credentials["username"]}:{self._credentials["password"]}".encode()).decode()
+        basic_auth_string = base64.b64encode(f"{self._credential_storage.username}:{self._credential_storage.password}".encode()).decode()
         basic_auth_headers = {
             "Accept": "application/json",
             "Authorization": f"Basic {basic_auth_string}",

@@ -14,8 +14,8 @@ from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 from azure.core.exceptions import HttpResponseError
 
-from suitespotauth.configure import SERVICE
-from suitespotauth.exceptions import SuiteSpotAuthError
+from .configure import SERVICE
+from .exceptions import SuiteSpotAuthError
 
 
 class CredentialStorage(ABC):
@@ -49,7 +49,7 @@ class LocalCredentialStorage(CredentialStorage):
     
 
 class AWSCredentialStorage(CredentialStorage):
-    def __init__(self, username_path, password_path):
+    def __init__(self, *, username_path, password_path):
         if not username_path or not password_path:
             raise SuiteSpotAuthError("SSM paths for username and password must be provided.")
         
@@ -75,7 +75,7 @@ class AWSCredentialStorage(CredentialStorage):
         
 
 class GCPCredentialStorage(CredentialStorage):
-    def __init__(self, project_id, username_secret_id, password_secret_id):
+    def __init__(self, *, project_id, username_secret_id, password_secret_id):
         if not project_id:
             raise SuiteSpotAuthError("GCP project ID must be provided.")
         if not username_secret_id or not password_secret_id:
@@ -105,7 +105,7 @@ class GCPCredentialStorage(CredentialStorage):
     
 
 class AzureCredentialStorage(CredentialStorage):
-    def __init__(self, vault_url, username_secret_name, password_secret_name):
+    def __init__(self, *, vault_url, username_secret_name, password_secret_name):
         if not vault_url:
             raise SuiteSpotAuthError("Azure vault URL must be provided.")
         if not username_secret_name or not password_secret_name:
