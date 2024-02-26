@@ -20,8 +20,7 @@ def mask_username(username, show_start=1, show_end=6):
 
 
 def main():
-    """Prompt and store SuiteSpot credentials."""
-
+    """Prompt and store local SuiteSpot credentials."""
     stored_username = keyring.get_password(SERVICE, "username")
     if stored_username:
         masked_username = mask_username(stored_username, show_start=1, show_end=6)
@@ -35,5 +34,5 @@ def main():
     else:
         password = getpass.getpass("SuiteSpot password [Input hidden]: ")
 
-    keyring.set_password("suitespotauth", "username", username)
-    keyring.set_password("suitespotauth", "password", password)
+    keyring.set_password(SERVICE, "username", username)
+    keyring.set_password(SERVICE, "password", password)

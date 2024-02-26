@@ -17,7 +17,11 @@ dependencies = [
     "keyring",
     "requests",
     "boto3",
-    "botocore"
+    "botocore",
+    "google-cloud-secret-manager",
+    "google-api-core",
+    "azure-identity",
+    "azure-keyvault"
 ]
 requires-python = ">=3.8"
 
