@@ -32,13 +32,13 @@ class SuiteSpotAuth:
         self._authenticate()
 
     def _fetch_credentials_from_ssm(self, path):
-        """Retrieve credentials from AWS Parameter Store (Systems Manager)."""
+        """Retrieve credentials from AWS Parameter Store (SSM)."""
         ssm = boto3.client("ssm")
         try:
             parameter = ssm.get_parameter(Name=path, WithDecryption=True)["Parameter"]["Value"]
             return parameter
         except ClientError as e:
-            raise SuiteSpotAuthError(f"An error occurred trying to fetch parameters in SSM from path {path}.\n{e}")
+            raise SuiteSpotAuthError(f"An error occurred trying to fetch parameters in SSM from path '{path}'.\n{e}")
 
     def _ensure_credentials(self):
         """Check if SuiteSpot credentials have been entered or fetch from AWS Parameter Store."""
@@ -71,8 +71,7 @@ class SuiteSpotAuth:
     
     def _api_token_exists(self):
         """Check if an API token already exists."""
-        headers = self._basic_auth_headers
-        response = requests.get(SuiteSpotAuth.BASE_URL, headers=headers)
+        response = requests.get(SuiteSpotAuth.BASE_URL, headers=self._basic_auth_headers)
 
         if response.status_code == 200:
             if response.json().get("apiTokens")[0]:
@@ -82,13 +81,12 @@ class SuiteSpotAuth:
     
     def _create_api_token(self):
         """Create an API token if none exists."""
-        headers = self._basic_auth_headers()
         body = {
             "name": self._api_token_name,
             "expiryTTL": "1w",
             "version": 3
         }
-        response = requests.post(SuiteSpotAuth.BASE_URL, headers=headers, json=body)
+        response = requests.post(SuiteSpotAuth.BASE_URL, headers=self._basic_auth_headers, json=body)
 
         if response.status_code == 201:
             self._api_token = response.json().get("apiTokenId")

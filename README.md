@@ -23,17 +23,17 @@ $ suitespotauth-configure
 ```
 
 ### Cloud environment
-#### AWS
-If you are running the package in an AWS environment, `suitespotauth` can retrieve your SuiteSpot credentials from AWS Parameter Store (SSM). Please see the [Cloud configuration](#cloud-configuration) section below before continuing.
+If you are running the package in a cloud environment, `suitespotauth` can retrieve your SuiteSpot credentials from the cloud provider. Please see the [Cloud configuration](#cloud-configuration) section below before continuing.
 
 ## Usage
-1. In your Python program, import the authenticator class:
+1. Import the authenticator class:
 ```python
 from suitespotauth import SuiteSpotAuth
 ```
 
 2. Create a class instance:
 ```python
+# Basic usage
 auth = SuiteSpotAuth()
 
 # Optionally, provide a name which gets stored in the SuiteSpot API token object
@@ -41,7 +41,6 @@ auth = SuiteSpotAuth(api_token_name="Custom API token name")
 
 # If using AWS SSM to store SuiteSpot credentials, provide the SSM paths to your username and password parameters
 auth = SuiteSpotAuth(
-    api_token_name="Custom API token name",  # Optional
     ssm_username_path="/path/to/suitespot/username/parameter/in/ssm",
     ssm_password_path="/path/to/suitespot/password/parameter/in/ssm"
 )
@@ -49,16 +48,23 @@ auth = SuiteSpotAuth(
 
 3. Use the `access_token` attribute in your data API request header:
 ```python
-"Authorization": f"Bearer {auth.access_token}"
+access_token = auth.access_token
+"Authorization": f"Bearer {access_token}"
 ```
 
 Official SuiteSpot data API docs should be retrieved directly from your SuiteSpot representative.
 
 ## Cloud configuration
-### AWS Parameter Store (SSM)
-To retrieve SuiteSpot credentials from SSM, you must have an AWS account, as well as IAM permissions for your runtime (e.g., Lambda) to access the parameters. Instructions for IAM permissions are beyond the scope of this readme.
+### AWS
+`suitespotauth` supports using AWS Systems Manager Parameter Store (SSM) to retrieve SuiteSpot credentials. You must have an AWS account, as well as IAM permissions for your runtime (e.g., Lambda) to access the parameters. Instructions for IAM permissions are beyond the scope of this readme.
 
 You must set two SSM parameters, username and password, and they can be named anything you want. Choose `SecureString` type when creating the parameters. Then, you must provide the paths to these parameters when instantiating the `SuiteSpotAuth` object. See the [Usage](#usage) section above.
+
+### GCP
+Future support planned...
+
+### Azure
+Future support planned...
 
 ## Disclaimer
 - This is an unofficial package and is not affiliated with SuiteSpot. The official SuiteSpot authentication API docs can be found at: https://auth.suitespot.io/api
