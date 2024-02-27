@@ -14,7 +14,7 @@ from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 from azure.core.exceptions import HttpResponseError
 
-from .configure import SERVICE
+from .cli import SERVICE
 from .exceptions import SuiteSpotAuthError
 
 

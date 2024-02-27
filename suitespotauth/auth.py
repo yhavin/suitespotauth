@@ -8,7 +8,6 @@ import base64
 import requests
 
 from .exceptions import SuiteSpotAuthError
-from .configure import SERVICE
 from .credentials import CredentialStorage
 
 

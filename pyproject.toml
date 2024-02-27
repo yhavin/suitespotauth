@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "suitespotauth"
-version = "0.3.0"
+version = "0.3.2"
 description = "Easy SuiteSpot authentication."
 authors = [{ name = "Yakir Havin", email = "y.havin@gmail.com" }]
 readme = "README.md"
@@ -29,4 +29,4 @@ requires-python = ">=3.8"
 Repository = "https://github.com/yhavin/suitespotauth"
 
 [project.scripts]
-suitespotauth-configure = "suitespotauth.configure:main"
+suitespotauth-configure = "suitespotauth.cli:main"
