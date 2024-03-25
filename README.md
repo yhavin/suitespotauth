@@ -57,6 +57,11 @@ headers = {
 
 Set two SSM parameters, username and password, named anything you want. Choose `SecureString` type when creating the parameters. Then, provide the paths to these parameters when creating the `AWSCredentialStorage` object.
 
+Install the AWS dependencies:
+```shell
+$ pip install 'suitespotauth[aws]'
+```
+
 ```python
 from suitespotauth import AWSCredentialStorage
 
@@ -68,6 +73,11 @@ my_credentials = AWSCredentialStorage(
 
 ### GCP
 `suitespotauth` supports using GCP Secret Manager to retrieve SuiteSpot credentials. Set two secrets, username and password, named anything you want. Then, provide the Project ID and the paths to these two secrets when creating the `GCPCredentialStorage` object. 
+
+Install the GCP dependencies:
+```shell
+$ pip install 'suitespotauth[gcp]'
+```
 
 ```python
 from suitespotauth import GCPCredentialStorage
@@ -81,6 +91,11 @@ my_credentials = GCPCredentialStorage(
 
 ### Azure
 `suitespotauth` supports using Azure Key Vault to retrieve SuiteSpot credentials. Set two secrets, username and password, named anything you want. Then, provide the Vault URL and the names of these two secrets when creating the `AzureCredentialStorage` object. 
+
+Install the Azure dependencies:
+```shell
+$ pip install 'suitespotauth[azure]'
+```
 
 ```python
 from suitespotauth import AzureCredentialStorage
